@@ -6,13 +6,14 @@ import { AuthProvider } from "react-oidc-context";
 const cognitoAuthConfig = {
   authority: "https://cognito-idp.eu-central-1.amazonaws.com/eu-central-1_eFK9hgEwW",
   client_id: "64r630o8mhb1qf9i93ls4eu990",
-  redirect_uri: "https://master.d23rejtqn9e2z9.amplifyapp.com/",
+  redirect_uri: "http://localhost:5174/",
   response_type: "code",
-  scope: "phone openid email",
+  scope: "email openid phone",
 };
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
+// wrap the application with AuthProvider
 root.render(
   <React.StrictMode>
     <AuthProvider {...cognitoAuthConfig}>
