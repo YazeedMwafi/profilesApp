@@ -2,22 +2,35 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
 import { AuthProvider } from "react-oidc-context";
-
-const cognitoAuthConfig = {
-  authority: "https://cognito-idp.eu-central-1.amazonaws.com/eu-central-1_eFK9hgEwW",
-  client_id: "64r630o8mhb1qf9i93ls4eu990",
-  redirect_uri: "http://localhost:5174/",
-  response_type: "code",
-  scope: "email openid phone",
-};
+import { ChakraProvider } from "@chakra-ui/react";
+import { BrowserRouter } from "react-router-dom";
+import theme from "./theme";
+import cognitoAuthConfig from "./auth/oidcConfig";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
-
-// wrap the application with AuthProvider
 root.render(
   <React.StrictMode>
-    <AuthProvider {...cognitoAuthConfig}>
-      <App />
-    </AuthProvider>
+    <ChakraProvider theme={theme}>
+      <BrowserRouter>
+        <AuthProvider
+          {...cognitoAuthConfig}
+          onSigninCallback={() => {
+            window.history.replaceState(
+              {},
+              document.title,
+              window.location.pathname
+            );
+          }}
+          onRemoveUser={() => {
+            try {
+              localStorage.clear();
+              sessionStorage.clear();
+            } catch {}
+          }}
+        >
+          <App />
+        </AuthProvider>
+      </BrowserRouter>
+    </ChakraProvider>
   </React.StrictMode>
 );
