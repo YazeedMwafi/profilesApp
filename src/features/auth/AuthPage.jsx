@@ -118,6 +118,8 @@ export const AuthPage = () => {
             size="lg"
             width="full"
             variant="solid"
+            bg="blue.500"
+            color="white"
             isLoading={isLoggingIn}
             loadingText="Signing in..."
             onClick={async () => {

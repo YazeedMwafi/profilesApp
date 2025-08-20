@@ -1,5 +1,6 @@
 import { useAuth } from 'react-oidc-context';
 import API_CONFIG from '../../lib/api.js';
+import { createAPIError, handleAPIError, retryWithBackoff, isRetryableError } from '../../lib/apiErrorHandler.js';
 
 export const useApiClient = () => {
   const auth = useAuth();
@@ -24,12 +25,12 @@ export const useApiClient = () => {
       ...options,
     };
 
-    try {
+    const requestFn = async () => {
       const response = await fetch(`${API_CONFIG.BASE_URL}${endpoint}`, config);
       
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
+        throw createAPIError(response, errorData);
       }
 
       const contentType = response.headers.get('content-type');
@@ -38,7 +39,19 @@ export const useApiClient = () => {
       }
       
       return await response.text();
+    };
+
+    try {
+      return await requestFn();
     } catch (error) {
+      // Retry logic for retryable errors
+      if (isRetryableError(error)) {
+        try {
+          return await retryWithBackoff(requestFn, 2, 1000);
+        } catch (retryError) {
+          throw retryError;
+        }
+      }
       throw error;
     }
   };

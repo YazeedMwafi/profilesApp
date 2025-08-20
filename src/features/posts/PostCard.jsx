@@ -86,7 +86,7 @@ export const PostCard = ({ post, onPostUpdate }) => {
         </Box>
         {isOwner && (
           <Menu>
-            <MenuButton as={IconButton} icon={<FaEllipsisV />} variant="ghost" size="sm" aria-label="Post options" colorScheme="gray" _hover={{ bg: 'gray.100', transform: 'scale(1.05)' }} />
+            <MenuButton as={IconButton} icon={<FaEllipsisV />} variant="ghost" size="sm" aria-label="Post options" colorScheme="gray" _hover={{ color: 'gray.600', bg: 'gray.100', transform: 'scale(1.05)' }} />
             <MenuList>
               <MenuItem icon={<FaEdit />} onClick={onEditOpen} _hover={{ bg: 'teal.50', color: 'teal.600' }}>Edit Post</MenuItem>
             </MenuList>
@@ -110,15 +110,20 @@ export const PostCard = ({ post, onPostUpdate }) => {
         {/* Likes */}
         <HStack spacing={1}>
           <IconButton
-            icon={userHasLiked ? <FaHeart /> : <FaRegHeart />}
+            icon={userHasLiked ? <FaHeart color="red" /> : <FaRegHeart color="red" />}
             aria-label="Like post"
             variant="ghost"
-            colorScheme={userHasLiked ? "red" : "gray"}
+            colorScheme="red"
             size="sm"
             onClick={handleLikeToggle}
             isLoading={isTogglingLike}
             isDisabled={!currentUser}
-            _hover={{ transform: 'scale(1.2)', color: userHasLiked ? 'red.500' : 'red.400', transition: 'all 0.2s' }}
+            bg="transparent"
+            _hover={{ 
+              transform: 'scale(1.2)', 
+              bg: 'transparent',
+              transition: 'all 0.2s' 
+            }}
             _active={{ transform: 'scale(1.3)' }}
             _focus={{ boxShadow: 'none' }}
           />

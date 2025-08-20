@@ -120,11 +120,16 @@ export const PostForm = ({ onSubmit, maxContentLength = 500 }) => {
         <Button
           type="submit"
           colorScheme="blue"
-          bg="blue.400"
+          bg="blue.500"
+          color="white"
           variant="solid"
           size="md"
           isDisabled={!content.trim()}
-          _hover={{ bg: "blue.600", transform: "translateY(-1px)", boxShadow: "lg" }}
+          _hover={{ 
+            bg: "blue.600", 
+            transform: "translateY(-1px)", 
+            boxShadow: "lg" 
+          }}
           _active={{ transform: "translateY(0)" }}
         >
           Share Post

@@ -162,7 +162,12 @@ export const ManagePostsPage = () => {
                         colorScheme="teal"
                         aria-label="Edit post"
                         onClick={() => handleEditClick(post)}
-                        _hover={{ transform: 'scale(1.05)' }}
+                        bg="teal.500"
+                        color="white"
+                        _hover={{ 
+                          transform: 'scale(1.05)',
+                          bg: 'teal.600'
+                        }}
                       />
                       <IconButton
                         icon={<FaTrash />}
@@ -171,7 +176,12 @@ export const ManagePostsPage = () => {
                         colorScheme="red"
                         aria-label="Delete post"
                         onClick={() => handleDeleteClick(post)}
-                        _hover={{ transform: 'scale(1.05)' }}
+                        bg="red.500"
+                        color="white"
+                        _hover={{ 
+                          transform: 'scale(1.05)',
+                          bg: 'red.600'
+                        }}
                       />
                     </Flex>
                   </Flex>

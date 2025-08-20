@@ -5,6 +5,7 @@ import { AuthPage } from "./features/auth";
 import { useAuth } from "react-oidc-context";
 import { Box, Spinner, useToast, Alert, AlertIcon, Button, Flex } from "@chakra-ui/react";
 import { handleAuthError } from "./features/auth";
+import { ErrorBoundary, handleAPIError } from "./lib";
 
 const ProtectedRoute = ({ children, roles = [] }) => {
   const auth = useAuth();
@@ -57,7 +58,10 @@ function App() {
         </Alert>
         <Button 
           colorScheme="blue"
+          bg="blue.500"
+          color="white"
           onClick={() => window.location.reload()}
+          _hover={{ bg: 'blue.600' }}
         >
           Retry
         </Button>
@@ -66,28 +70,30 @@ function App() {
   }
 
   return (
-    <Routes>
-      <Route path="/auth" element={<AuthPage />} />
-      <Route
-        path="/"
-        element={
-          <ProtectedRoute>
-            <Layout />
-          </ProtectedRoute>
-        }
-      >
-        <Route index element={<HomePage />} />
+    <ErrorBoundary>
+      <Routes>
+        <Route path="/auth" element={<AuthPage />} />
         <Route
-          path="manage"
+          path="/"
           element={
-            <ProtectedRoute roles={["admin"]}>
-              <ManagePostsPage />
+            <ProtectedRoute>
+              <Layout />
             </ProtectedRoute>
           }
-        />
-      </Route>
-      <Route path="*" element={<Navigate to="/" replace />} />
-    </Routes>
+        >
+          <Route index element={<HomePage />} />
+          <Route
+            path="manage"
+            element={
+              <ProtectedRoute roles={["admin"]}>
+                <ManagePostsPage />
+              </ProtectedRoute>
+            }
+          />
+        </Route>
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </ErrorBoundary>
   );
 }
 
