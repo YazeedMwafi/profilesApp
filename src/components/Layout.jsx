@@ -14,21 +14,24 @@ import {
   IconButton,
   useColorModeValue,
   Image,
+  useToast,
 } from "@chakra-ui/react";
 import { Link as RouterLink, Outlet } from "react-router-dom";
 import { useAuth } from "react-oidc-context";
-import { performLogout } from "../auth/logout";
+import { performLogout, getUserDisplayName } from "../features/auth/authUtils";
+
 import { FaMoon, FaSun } from "react-icons/fa";
 import bloggerLogo from "../assets/bloggerIcon.svg";
 
 export const Layout = () => {
   const auth = useAuth();
+  const toast = useToast();
   const { colorMode, toggleColorMode } = useColorMode();
   const bg = useColorModeValue("white", "gray.800");
   const borderColor = useColorModeValue("gray.200", "gray.700");
 
   const handleSignOut = async () => {
-    await performLogout(auth);
+    await performLogout(auth, toast);
   };
 
   return (
@@ -77,12 +80,12 @@ export const Layout = () => {
                   leftIcon={
                     <Avatar
                       size="sm"
-                      name={auth.user?.profile.name || auth.user?.profile.email}
+                      name={getUserDisplayName(auth)}
                     />
                   }
                 >
                   <Text display={{ base: "none", md: "block" }}>
-                    {auth.user?.profile.name || auth.user?.profile.preferred_username || auth.user?.profile.email?.split("@")[0]}
+                    {getUserDisplayName(auth)}
                   </Text>
                 </MenuButton>
                 <MenuList>

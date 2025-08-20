@@ -4,8 +4,8 @@ import App from "./App";
 import { AuthProvider } from "react-oidc-context";
 import { ChakraProvider } from "@chakra-ui/react";
 import { BrowserRouter } from "react-router-dom";
-import theme from "./theme";
-import cognitoAuthConfig from "./auth/oidcConfig";
+import { theme } from "./lib";
+import { cognitoAuthConfig } from "./features/auth";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(

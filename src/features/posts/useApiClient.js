@@ -1,5 +1,5 @@
 import { useAuth } from 'react-oidc-context';
-import API_CONFIG from '../config/api.js';
+import API_CONFIG from '../../lib/api.js';
 
 export const useApiClient = () => {
   const auth = useAuth();
@@ -44,8 +44,8 @@ export const useApiClient = () => {
   };
 
   // Posts API methods
-  const getPosts = async () => {
-    return makeRequest(API_CONFIG.ENDPOINTS.POSTS);
+  const getPosts = async (page = 1, limit = 10) => {
+    return makeRequest(`${API_CONFIG.ENDPOINTS.POSTS}?page=${page}&limit=${limit}`);
   };
 
   const getPostById = async (id) => {

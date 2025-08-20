@@ -1,10 +1,10 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import { Layout } from "./components/Layout";
-import { HomePage } from "./pages/HomePage";
-import { ManagePostsPage } from "./pages/ManagePostsPage";
-import { AuthPage } from "./pages/AuthPage";
+import { HomePage, ManagePostsPage } from "./features/posts";
+import { AuthPage } from "./features/auth";
 import { useAuth } from "react-oidc-context";
-import { Box, Spinner, useToast } from "@chakra-ui/react";
+import { Box, Spinner, useToast, Alert, AlertIcon, Button, Flex } from "@chakra-ui/react";
+import { handleAuthError } from "./features/auth";
 
 const ProtectedRoute = ({ children, roles = [] }) => {
   const auth = useAuth();
@@ -32,13 +32,14 @@ const ProtectedRoute = ({ children, roles = [] }) => {
 
 function App() {
   const auth = useAuth();
+  const toast = useToast();
 
   if (auth.isLoading) {
     return (
-      <Box
-        display="flex"
-        justifyContent="center"
-        alignItems="center"
+      <Box 
+        display="flex" 
+        justifyContent="center" 
+        alignItems="center" 
         minH="100vh"
       >
         <Spinner size="xl" />
@@ -46,7 +47,24 @@ function App() {
     );
   }
 
-  console.log(auth.user?.profile);
+  if (auth.error) {
+    handleAuthError(auth.error, toast);
+    return (
+      <Flex direction="column" align="center" justify="center" minH="100vh" p={4}>
+        <Alert status="error" mb={4} maxW="md">
+          <AlertIcon />
+          Authentication Error: {auth.error.message}
+        </Alert>
+        <Button 
+          colorScheme="blue"
+          onClick={() => window.location.reload()}
+        >
+          Retry
+        </Button>
+      </Flex>
+    );
+  }
+
   return (
     <Routes>
       <Route path="/auth" element={<AuthPage />} />

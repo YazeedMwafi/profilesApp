@@ -1,10 +1,11 @@
 import { Box, Heading, VStack, Spinner, Alert, AlertIcon } from "@chakra-ui/react";
-import { PostCard } from "../components/PostCard";
-import { PostForm } from "../components/PostForm";
-import { usePosts } from "../hooks/usePosts";
+import { PostCard } from "./PostCard";
+import { PostForm } from "./PostForm";
+import { InfiniteScroll } from "../../lib/InfiniteScroll";
+import { useInfinitePosts } from "./useInfinitePosts";
 
 export const HomePage = () => {
-  const { posts, loading, error, createPost, refreshPosts } = usePosts();
+  const { posts, loading, error, hasMore, loadMore, createPost, refresh } = useInfinitePosts(10);
 
   const handleAddPost = async (newPost) => {
     try {
@@ -38,11 +39,17 @@ export const HomePage = () => {
       
       <PostForm onSubmit={handleAddPost} />
       
-      <VStack spacing={4} mt={6} align="stretch">
-        {posts.map((post) => (
-          <PostCard key={post._id} post={post} onPostUpdate={refreshPosts} />
-        ))}
-      </VStack>
+      <InfiniteScroll
+        hasMore={hasMore}
+        loading={loading}
+        loadMore={loadMore}
+      >
+        <VStack spacing={4} mt={6} align="stretch">
+          {posts.map((post) => (
+            <PostCard key={post._id} post={post} onPostUpdate={refresh} />
+          ))}
+        </VStack>
+      </InfiniteScroll>
       
       {posts.length === 0 && !loading && (
         <Box textAlign="center" py={8}>

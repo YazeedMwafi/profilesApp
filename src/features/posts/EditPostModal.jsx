@@ -18,7 +18,7 @@ import {
   TagCloseButton,
   useToast,
 } from "@chakra-ui/react";
-import { useApiClient } from "../hooks/useApiClient";
+import { useApiClient } from "./useApiClient";
 
 export const EditPostModal = ({ isOpen, onClose, post, onPostUpdated }) => {
   const [content, setContent] = useState(post?.content || "");
@@ -135,15 +135,24 @@ export const EditPostModal = ({ isOpen, onClose, post, onPostUpdated }) => {
         </ModalBody>
 
         <ModalFooter>
-          <Button variant="ghost" mr={3} onClick={onClose}>
+          <Button 
+            variant="outline" 
+            colorScheme="gray"
+            mr={3} 
+            onClick={onClose}
+            _hover={{ bg: 'gray.50' }}
+          >
             Cancel
           </Button>
           <Button
-            colorScheme="blue"
+            colorScheme="teal"
+            variant="solid"
             onClick={handleSubmit}
             isLoading={isLoading}
             loadingText="Updating..."
             isDisabled={!content.trim()}
+            _hover={{ bg: 'teal.600', transform: 'translateY(-1px)', boxShadow: 'lg' }}
+            _disabled={{ opacity: 0.4, cursor: 'not-allowed' }}
           >
             Update Post
           </Button>
